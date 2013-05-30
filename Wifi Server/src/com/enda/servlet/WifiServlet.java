@@ -49,7 +49,7 @@ public class WifiServlet extends HttpServlet {
 			TrackPrediction trackpredictor = new TrackPrediction(user,locs);
 			Route predictedRoute =  trackpredictor.getPredictedTrack();
 			
-			out.println(predictedRoute);
+			out.println(predictedRoute.toString());
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
