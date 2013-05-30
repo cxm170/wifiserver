@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.enda.usertrackprediction.CollectTrace;
 import com.enda.usertrackprediction.Coordinate;
-import com.enda.usertrackprediction.Route;
-import com.enda.usertrackprediction.TrackPrediction;
 import com.enda.usertrackprediction.User;
 
 @WebServlet("/tracestore")
@@ -33,7 +31,8 @@ public class TraceStoreServlet extends HttpServlet {
 		
 		Coordinate currentLoc = new Coordinate(latitude,longitude);
 		
-
+		PrintWriter out = resp.getWriter();
+		
 	    try {
 		// The newInstance() call is a work around for some
 		// broken Java implementations
@@ -47,7 +46,7 @@ public class TraceStoreServlet extends HttpServlet {
 		try {
 			CollectTrace collecttrace = new CollectTrace(user);
 			collecttrace.storeTrace(currentLoc);
-
+			out.println(currentLoc+" has been added succesfully.");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
