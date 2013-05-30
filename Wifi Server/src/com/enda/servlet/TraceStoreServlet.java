@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.enda.usertrackprediction.CollectTrace;
 import com.enda.usertrackprediction.Coordinate;
 import com.enda.usertrackprediction.Route;
 import com.enda.usertrackprediction.TrackPrediction;
 import com.enda.usertrackprediction.User;
 
-@WebServlet("/wifi")
-public class WifiServlet extends HttpServlet {
+@WebServlet("/tracestore")
+public class TraceStoreServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,9 +33,7 @@ public class WifiServlet extends HttpServlet {
 		
 		Coordinate currentLoc = new Coordinate(latitude,longitude);
 		
-		Coordinate[] locs = {currentLoc};
-		PrintWriter out = resp.getWriter();
-		
+
 	    try {
 		// The newInstance() call is a work around for some
 		// broken Java implementations
@@ -46,10 +45,9 @@ public class WifiServlet extends HttpServlet {
 	    }
 	    
 		try {
-			TrackPrediction trackpredictor = new TrackPrediction(user,locs);
-			Route predictedRoute =  trackpredictor.getPredictedTrack();
-			
-			out.println(predictedRoute.toString());
+			CollectTrace collecttrace = new CollectTrace(user);
+			collecttrace.storeTrace(currentLoc);
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
