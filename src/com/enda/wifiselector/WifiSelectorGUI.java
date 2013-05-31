@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 
-public class WifiSelector {
+public class WifiSelectorGUI {
 
 	Canvas can;
 	Frame map;
@@ -44,7 +44,7 @@ public class WifiSelector {
 	    Color.green, Color.black, Color.blue, Color.red, 
 	    Color.yellow, Color.orange, Color.cyan, Color.pink, 
 	    Color.magenta};
-	public WifiSelector(){
+	public WifiSelectorGUI(){
 		xPoints = new ArrayList<Integer>();
 	    yPoints = new ArrayList<Integer>();
 		can = new Canvas();
@@ -328,7 +328,7 @@ public class WifiSelector {
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new WifiSelector();
+		new WifiSelectorGUI();
 	}
 
 }
