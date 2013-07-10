@@ -59,7 +59,7 @@ public class Wifi {
 	}
 	
 	public String toString(){
-		return this.APname+"@<"+this.xPos+","+this.yPos+">"+radius+" meters";
+		return this.APname+"@<"+this.xPos+","+this.yPos+"> Range: "+radius+" meters";
 	}
 	
 	public double getDistanceFrom(Coordinate target){

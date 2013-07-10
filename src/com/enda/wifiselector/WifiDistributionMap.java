@@ -19,8 +19,9 @@ public class WifiDistributionMap {
 		boolean isQualified = true;
 		while(it.hasNext()){
 			Wifi wifi = it.next();
+			//Qualified Wifi should cover all coordinates reported.
 			for(int i=0;i<coordinates.length;i++){
-				if(wifi.getDistanceFrom(coordinates[i])>wifi.getRadius()){
+				if(wifi.getDistanceFrom(coordinates[i])>(wifi.getRadius()/1000)){
 					isQualified = false;
 					break;}
 			}
@@ -29,7 +30,7 @@ public class WifiDistributionMap {
 				qualifiedWifi.add(wifi);
 			}
 		}
-		
+
 		return qualifiedWifi;
 	}
 

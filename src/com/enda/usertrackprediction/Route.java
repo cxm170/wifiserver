@@ -16,12 +16,20 @@ public class Route implements Comparable<Route>{
 	public List<Coordinate> getRoute(){
 		return route;
 	}
+	
+	public Coordinate[] toCoordinates(){
+		return this.route.toArray(new Coordinate[0]);
+	}
 
 	public void add(Coordinate currentLoc) {
 		// TODO Auto-generated method stub
 		this.route.add(currentLoc);
 	}
 	
+	public boolean addAll(int index, List<Coordinate> list){
+		return this.route.addAll(index,list);
+	}
+
 	@Override
 	public String toString(){
 		Iterator<Coordinate> it = this.route.iterator();

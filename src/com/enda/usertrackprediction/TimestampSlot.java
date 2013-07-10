@@ -22,6 +22,10 @@ public class TimestampSlot implements Comparable<TimestampSlot>{
 		else return "\"" +this.currentTime.toString()+ "\"";
 	}
 	
+	public long getTimeSlotInMillisecond(){
+		return this.currentTime.getTime()-this.previousTime.getTime();
+	}
+	
 	public void setPreviousTime(Timestamp previousTime){
 		this.previousTime=previousTime;
 	}

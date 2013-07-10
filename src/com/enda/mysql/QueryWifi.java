@@ -27,8 +27,8 @@ public class QueryWifi {
 
 
 	    try {
-	    	String sql = "select * from wifilocations ";
-	    	System.out.println(sql);
+	    	String sql = "select * from wifilocation ";
+//	    	System.out.println(sql);
 	        stmt = con.createStatement();
 	        ResultSet rs=stmt.executeQuery(
 	            sql);
@@ -36,9 +36,9 @@ public class QueryWifi {
 
 	        	
 	        	String APname = rs.getString("name");
-	    		double x = rs.getDouble('x');
-	    		double y = rs.getDouble('y');
-	    		int radius = rs.getInt("radious");
+	    		double x = rs.getDouble("x");
+	    		double y = rs.getDouble("y");
+	    		int radius = rs.getInt("radius");
 	    		
 	        	Wifi wifi = new Wifi(APname,x,y,radius);
 	        	results.add(wifi);
@@ -49,7 +49,7 @@ public class QueryWifi {
 	    } finally {
 	        if (stmt != null) {
 	          stmt.close();
-	          System.out.println("Connection closed.");
+//	          System.out.println("Connection closed.");
 	        }
 	    }
 	    return results;

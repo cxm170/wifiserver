@@ -14,6 +14,7 @@ import com.enda.usertrackprediction.CollectTrace;
 import com.enda.usertrackprediction.Coordinate;
 import com.enda.usertrackprediction.User;
 
+@SuppressWarnings("serial")
 @WebServlet("/tracestore")
 public class TraceStoreServlet extends HttpServlet {
 
