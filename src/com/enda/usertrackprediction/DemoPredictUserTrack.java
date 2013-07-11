@@ -1,6 +1,7 @@
 package com.enda.usertrackprediction;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public class DemoPredictUserTrack {
 	public static void main(String [] args) throws SQLException{
@@ -13,8 +14,10 @@ public class DemoPredictUserTrack {
 		Coordinate[] locs = {c2,c1};
 		
 		TrackPrediction trackpredictor = new TrackPrediction(user,locs);
-		Route predictedRoute =  trackpredictor.getPredictedTrack();
 
+		Map<Route,Integer> predictedRoutes = trackpredictor.getPredictedTracks();
+		Route predictedRoute =  trackpredictor.getPredictedTrack(predictedRoutes);
+//		Route predictedRoute1 =  trackpredictor.getPredictedTrack();
 	}
 
 }

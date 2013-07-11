@@ -16,11 +16,12 @@ import com.enda.util.*;
 
 public class ProcessTrace {
 
-	private Map<TimestampSlot,Route> generatedRoutes = new TreeMap<TimestampSlot,Route>();
-	private Map<Route,Integer> refinedRoutes = new TreeMap<Route,Integer>();
+	
+	
 	private User user;
 	
 	//metric unit: kilometer. The bigger this value, the less the num of generated routes will be.
+	//Distance_threshold is used to differentiate different routes. 
 	private final double DISTANCE_threshold = 0.018;
 	
 	//metric unit: kilometer. The bigger this value, the less the num of refined routes will be.
@@ -52,7 +53,7 @@ public class ProcessTrace {
 	public Map<Route,Integer> refineListOfRoutes(Map<TimestampSlot,Route> generatedRoutes){
 		
 		//filter short routes in generatedRoutes.
-		
+		Map<Route,Integer> refinedRoutes = new TreeMap<Route,Integer>();
 		Map<TimestampSlot,Route> filteredRoutes = new TreeMap<TimestampSlot,Route>();
 		
 		for(Map.Entry<TimestampSlot,Route> entry:generatedRoutes.entrySet()){
@@ -75,26 +76,37 @@ public class ProcessTrace {
 
 			}
 		
-		//Sort generatedRoutes on the length of Route in each entry
-		//Bisection. Half part. Half part.
-		//recursive bisection
-		//pool the routes left. Frequency automatically increases as its route joins other route.
+		//Generate refinedRoutes.
+		//Frequency automatically increases as its route joins other route.
+		
+		boolean whetherFind;
 		
 		for(Map.Entry<TimestampSlot,Route> entry:filteredRoutes.entrySet()){
-			boolean whetherFind = false;
+			 whetherFind = false;
 			Route processedRoute = entry.getValue();
 			MergeRedundantRoutes mergeRedundantRoutes = new MergeRedundantRoutes();
 			if(!refinedRoutes.isEmpty()){
+				int count;
 			for(Map.Entry<Route, Integer> e:refinedRoutes.entrySet()){
 				Route refinedRoute = e.getKey();
-				int count = e.getValue().intValue();
+				count = e.getValue().intValue();
+				//If refinedRoute contains processedRoute, true, then count + 1 for the refinedRoute
 				if(mergeRedundantRoutes.isSubSetOf(processedRoute, refinedRoute,MERGE_threshold)){
-					this.refinedRoutes.put(refinedRoute, new Integer(count+1));
+					refinedRoutes.put(refinedRoute, new Integer(count+1));
 					whetherFind = true;
 					break;}
-					}
+					
+			//if processRoute contains refinedRoute, true, then remove refinedRoute, and add processedRoute with count+1
+			if(mergeRedundantRoutes.isSubSetOf(refinedRoute,processedRoute, MERGE_threshold)){
+				refinedRoutes.remove(refinedRoute);
+				refinedRoutes.put(processedRoute, new Integer(count+1));
+				whetherFind = true;
+				break;}
+			
+				}
 			}
-			if(whetherFind == false) this.refinedRoutes.put(processedRoute, new Integer(1));
+			//If processRoute doesn't contain any refindedRoute, or any refinedRoute doesn't contain processRoute, add processRoute.
+			if(whetherFind == false) refinedRoutes.put(processedRoute, new Integer(1));
 		}
 		
 
@@ -113,6 +125,7 @@ public class ProcessTrace {
 	
 // generate list of routes for target users. These routes are not compressed yet at this stage.	
 	public Map<TimestampSlot,Route> generateListOfRoutes() throws SQLException {
+		Map<TimestampSlot,Route> generatedRoutes = new TreeMap<TimestampSlot,Route>();
 		Map<Timestamp,Coordinate> allLoc = new TreeMap<Timestamp,Coordinate>();
 		
 		//Invoke retrieveCoordinate(), and get all relevant coordinates
@@ -136,7 +149,7 @@ public class ProcessTrace {
 			//If currentLoc is too far away from previousLoc, the route is considered reaching the end.
 			if (!currentLoc.withinThreshold(previousLoc, DISTANCE_threshold)){
 
-				this.generatedRoutes.put(timeSlot,route);
+				generatedRoutes.put(timeSlot,route);
 				previousDatetime = currentDatetime;
 				previousLoc = currentLoc;
 				//new route is referenced.
@@ -159,7 +172,7 @@ public class ProcessTrace {
 		}
 
 
-		this.generatedRoutes.put(timeSlot,route);
+		generatedRoutes.put(timeSlot,route);
 		
 		if (!generatedRoutes.isEmpty()){
 //			System.out.println("The generated routes for "+user +" are:");

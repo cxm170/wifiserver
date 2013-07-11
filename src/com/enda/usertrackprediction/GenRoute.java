@@ -6,25 +6,26 @@ import java.util.TreeMap;
 
 public class GenRoute {
 	
-	private Map<TimestampSlot, Route> generatedRoutes = new TreeMap<TimestampSlot,Route>();
-	private Map<Route,Integer> refinedRoutes = new TreeMap<Route,Integer>();
+
 	private ProcessTrace processTrace = new ProcessTrace();
 	
 	public GenRoute(User user) throws SQLException{
 		 this.processTrace.setUser(user);
-		generatedRoutes = processTrace.generateListOfRoutes();
+		
 		
 	}
 	
-	public Map<TimestampSlot, Route> getGeneratedRoutes(){
-				
-		return this.generatedRoutes;
-	}
+//	public Map<TimestampSlot, Route> getGeneratedRoutes(){
+//				
+//		return this.generatedRoutes;
+//	}
 	
 	
 	//Only invoked, generatedRoutes will be refined, which causes large amounts of computation.
-	public Map<Route,Integer> getRefinedRoutes(){
-		refinedRoutes = processTrace.refineListOfRoutes(generatedRoutes);
-		return this.refinedRoutes;
+	public Map<Route,Integer> getRefinedRoutes() throws SQLException{
+		 
+		 Map<TimestampSlot, Route> generatedRoutes = processTrace.generateListOfRoutes();
+		 Map<Route,Integer> refinedRoutes = processTrace.refineListOfRoutes(generatedRoutes);
+		return refinedRoutes;
 	}
 }

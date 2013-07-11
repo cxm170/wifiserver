@@ -21,8 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.enda.usertrackprediction.Coordinate;
 import com.enda.usertrackprediction.Route;
 import com.enda.usertrackprediction.TimestampSlot;
+import com.enda.usertrackprediction.TrackAdjust;
 import com.enda.usertrackprediction.TrackPrediction;
 import com.enda.usertrackprediction.User;
+import com.enda.util.PrintRefinedRoutes;
+import com.enda.util.PrintRoutesOnWeb;
 import com.enda.wifiselector.Wifi;
 import com.enda.wifiselector.WifiDistributionMap;
 
@@ -37,10 +40,12 @@ public class WifiSelectServlet extends HttpServlet {
 		String username = req.getParameter("name");
 		String x = req.getParameter("x");
 		String y = req.getParameter("y");
+		String size = req.getParameter("size"); //unit: KB
 		
 		User user = new User(username);
 		double latitude = Double.parseDouble(x);
 		double longitude = Double.parseDouble(y);
+		int datasize = Integer.parseInt(size);
 		
 		Coordinate currentLoc = new Coordinate(latitude,longitude);
 		
@@ -98,16 +103,40 @@ public class WifiSelectServlet extends HttpServlet {
 	    
 		try {
 			TrackPrediction trackpredictor = new TrackPrediction(user,coordinates);
-			Route predictedRoute =  trackpredictor.getPredictedTrack();
-			out.println("<html><body>Temporary Locations: ");
+			Map<Route,Integer> predictedRoutes =  trackpredictor.getPredictedTracks();
+			
+			//Pre-define the bandwidth for each cloudlet.
+			int bandwidth = 200; //unit: KB/s
+					
+			TrackAdjust trackAdjust = new TrackAdjust();
+			
+			Map<Route,Integer> adjustedRoutes = trackAdjust.adjustTrack(predictedRoutes, datasize, bandwidth);
+			
+			
+			out.println("<html><body>Temporary Locations: <br>");
 			out.println(TempLocations.locations);
 
-			out.println("<br>Most recent reported locations: ");
+			out.println("<br>Most recent reported locations: <br>");
 			out.println(temp);
-			out.println("<br>The predicted Route is: ");
-			out.println(predictedRoute);
-			out.println("<br>Qualified WiFi: ");
 			
+			out.println("<br>The predicted routes are: <br>");
+			if(adjustedRoutes.size()>0){
+			out.println(new PrintRoutesOnWeb<Route,Integer>(adjustedRoutes));}
+			else
+				out.println("No matched route is found.");
+			
+			
+			//Get the optimal one from adjustedRoutes
+			Route predictedRoute = trackpredictor.getPredictedTrack(adjustedRoutes);
+//			Route predictedRoute = trackpredictor.getPredictedTrack();
+			out.println("<br>The optimal predicted route is: <br>");
+			if(predictedRoute.size()>0){
+			out.println(predictedRoute);}
+			else
+				out.println("No matched route is found.");
+			
+			
+			out.println("<br>Qualified WiFi: <br>");
 			List<Wifi> qualifiedwifi = WifiDistributionMap.getWifiMap(predictedRoute.toCoordinates());
 			if(predictedRoute.size()>0 && qualifiedwifi.size()>0)
 			out.println(qualifiedwifi);

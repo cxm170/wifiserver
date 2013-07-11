@@ -7,12 +7,14 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.enda.util.*;
+
 public class TrackPrediction {
 		
 	private Coordinate[] currentLoc;
-	private Route predictedTrack = new Route();
-	private Map<Route,Integer> predictedTracks = new TreeMap<>();
-	private Map<Route, Integer> routesCompareTo;
+//	private Route predictedTrack = new Route();
+//	private Map<Route,Integer> predictedTracks = new TreeMap<>();
+
 	private GenRoute genRoute; 
 	
 	private final double MATCH_threshold = 0.01;
@@ -21,54 +23,118 @@ public class TrackPrediction {
 	
 	public TrackPrediction(User user, Coordinate[] currentLoc) throws SQLException{
 		this.currentLoc = currentLoc;
-		genRoute = new GenRoute(user);
+		this.genRoute = new GenRoute(user);
 	}
 	
-	//compare with genRoute, so as to get predicated track for target user
-	public Route getPredictedTrack(){
-
-		routesCompareTo = this.genRoute.getRefinedRoutes();
-
+//	//compare with genRoute, so as to get predicated track for target user
+//	public Route getPredictedTrack(){
+//		Route predictedTrack = new Route();
+//		Map<Route, Integer> routesCompareTo = this.genRoute.getRefinedRoutes();
+//		int frequencyOfPredictedTrack = 0;
+//		
+//		//prediction algorithm. Match currentLoc with all coor in routesCompareTo.
+//		
+//		MatchRoute matchRoute = new MatchRoute(this.currentLoc);
+//		
+//		Map<Route,Integer> tempMatchedRoutes = new TreeMap<Route,Integer>();
+//		
+//		for(Map.Entry<Route, Integer> entry:routesCompareTo.entrySet()){
+//			Route routeCompareTo = entry.getKey();
+//			Integer frequency = entry.getValue();
+//
+//			if (matchRoute.allWithinRoute(routeCompareTo, MATCH_threshold)) {
+//				tempMatchedRoutes.put(routeCompareTo,frequency);
+////				System.out.println(entry);
+//				}
+//			}
+//		
+//		if(!tempMatchedRoutes.isEmpty()){
+//			
+//		System.out.println("In all, "+tempMatchedRoutes.size()+ " routes are found matched.");	
+//		
+//		
+//		
+//		
+//		//the predicted Track must start with the first item in currentLoc.
+//		
+//		//Choose the optimal one from adjustRoutes
+//		
+//		Map<Route,Integer> tempRefinedMatchedRoutes = getQualifiedRoutes(tempMatchedRoutes);
+//		
+//		Map.Entry<Route,Integer> maxEntry = null;
+//
+//		for (Map.Entry<Route,Integer> entry : tempRefinedMatchedRoutes.entrySet())
+//		{
+//		    if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+//		    {
+//		        maxEntry = entry;
+//		        
+//		    }
+//		}
+//		
+//		
+//		predictedTrack = maxEntry.getKey();
+//	
+//		frequencyOfPredictedTrack = maxEntry.getValue();
+//		
+//		}
+//
+//		if(predictedTrack.size()>0){
+//		System.out.println("The most matched route is:");
+//		System.out.println(predictedTrack+" This route has been recorded by "+frequencyOfPredictedTrack+" times.");}
+//		else{
+//			System.out.println("No matched route is found.");
+//		}
+//		return predictedTrack;
+//		
+//	}
+	
+	
+	public Route getPredictedTrack() throws SQLException{
+		Map<Route,Integer> temp = getPredictedTracks();
 		
-		//prediction algorithm. Match currentLoc with all coor in routesCompareTo.
+		return getPredictedTrack(temp);
+	}
+	
+	public Route getPredictedTrack(Map<Route,Integer> predictedTracks){
+		int frequencyOfPredictedTrack = 0;
+		Route predictedTrack = new Route();
+		Map.Entry<Route,Integer> maxEntry = null;
 		
-		MatchRoute matchRoute = new MatchRoute(this.currentLoc);
-		
-		Map<Route,Integer> tempMatchedRoutes = new TreeMap<Route,Integer>();
-		
-		for(Map.Entry<Route, Integer> entry:routesCompareTo.entrySet()){
-			Route routeCompareTo = entry.getKey();
-			Integer frequency = entry.getValue();
-
-			if (matchRoute.allWithinRoute(routeCompareTo, MATCH_threshold)) {
-				tempMatchedRoutes.put(routeCompareTo,frequency);
-				System.out.println(entry);
-				}
-			}
-		
-		if(!tempMatchedRoutes.isEmpty()){
-			
-		System.out.println("In all, "+tempMatchedRoutes.size()+ " routes are found matched.");	
+		if(predictedTracks.size()>0){
+		for (Map.Entry<Route,Integer> entry : predictedTracks.entrySet())
+		{
+		    if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+		    {
+		        maxEntry = entry;
+		        
+		    }
+		  
+		}
 		
 		
-		//the predicted Track must start with the first item in currentLoc.
+		predictedTrack = maxEntry.getKey();
+		frequencyOfPredictedTrack = maxEntry.getValue();
 		
-		this.predictedTrack = ((TreeMap<Route,Integer>) getQualifiedRoutes(tempMatchedRoutes)).lastEntry().getKey();
 		}
 
-		
+		if(predictedTrack.size()>0){
 		System.out.println("The most matched route is:");
-		System.out.println(predictedTrack);
-		return this.predictedTrack;
+		System.out.println(predictedTrack+" This route has been recorded by "+frequencyOfPredictedTrack+" times.");}
+		else{
+			System.out.println("No matched route is found.");
+		}
+		return predictedTrack;
+		
 		
 	}
 	
 	
 	//Get a list of predicted routes.
-	public Map<Route,Integer> getPredictedTracks(){
-		routesCompareTo = this.genRoute.getRefinedRoutes();
+	public Map<Route,Integer> getPredictedTracks() throws SQLException{
+		Map<Route, Integer> routesCompareTo = this.genRoute.getRefinedRoutes();
 
-		
+		Map<Route,Integer> predictedTracks = new TreeMap<>();
 		//prediction algorithm. Match currentLoc with all coor in routesCompareTo.
 		
 		MatchRoute matchRoute = new MatchRoute(this.currentLoc);
@@ -81,7 +147,7 @@ public class TrackPrediction {
 
 			if (matchRoute.allWithinRoute(routeCompareTo, MATCH_threshold)) {
 				tempMatchedRoutes.put(routeCompareTo,frequency);
-				System.out.println(entry);
+//				System.out.println(entry);
 				}
 			}
 		
@@ -92,16 +158,20 @@ public class TrackPrediction {
 		
 		//the predicted Track must start with the first item in currentLoc.
 		
-		this.predictedTracks = getQualifiedRoutes(tempMatchedRoutes);
+		predictedTracks = getQualifiedRoutes(tempMatchedRoutes);
 		}
 
-		
+		if(predictedTracks.size()>0){
 		System.out.println("Qualified tracks are: ");
-		System.out.println(predictedTracks);
-		return this.predictedTracks;
+		System.out.println(new PrintRefinedRoutes<Route, Integer>(predictedTracks));}
+		else{
+			System.out.println("No matched routes are found.");
+		}
+		return predictedTracks;
 	}
 	
 	
+	//Make sure routes start with current locations
 	private Map<Route,Integer> getQualifiedRoutes(Map<Route,Integer> tempMatchedRoutes){
 		Map<Route,Integer> qualifiedRoutes = new TreeMap<>();
 		
@@ -121,7 +191,7 @@ public class TrackPrediction {
 			
 			Route  temprt= new Route();
 			temprt.getRoute().addAll(rt.getRoute());
-			System.out.println("After Pruned: "+temprt);
+//			System.out.println("After Pruned: "+temprt);
 			qualifiedRoutes.put(temprt,entry.getValue());
 		}
 		
