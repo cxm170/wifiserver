@@ -37,6 +37,11 @@ public class DemoCollectTraceAndGenerateRoutes {
 //			ycor = ycor - 0.000183 * r;}
 //			
 //
+		//write a random walk algorithm
+		//retrieve the coordinate at different time interval
+		
+		
+		
 //		currentLoc.setX(xcor); 
 //		currentLoc.setY(ycor);
 //		collecttrace.storeTrace(currentLoc);

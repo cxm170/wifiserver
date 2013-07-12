@@ -34,17 +34,17 @@ public class Route implements Comparable<Route>{
 	public String toString(){
 		Iterator<Coordinate> it = this.route.iterator();
 		StringBuilder  returned = new StringBuilder();
-//		while(it.hasNext())
-//		{
-//		    Coordinate c = it.next();
-//		    returned.append(c.toString());
-//		    
-//	
-//		}
+		while(it.hasNext())
+		{
+		    Coordinate c = it.next();
+		    returned.append(c.toString());
+		    
+	
+		}
 		if(this.route.size()>1){
-		returned.append(this.route.get(0));
-		returned.append("-->");
-		returned.append(this.route.get(this.route.size()-1));
+//		returned.append(this.route.get(0));
+//		returned.append("-->");
+//		returned.append(this.route.get(this.route.size()-1));
 		returned.append("\r\nThere are "+this.getNumOfCoordinates()+" coordinates in this route. Overall distance is "+this.getOverallDistance()+" km.");
 		}
 		else{
@@ -55,6 +55,10 @@ public class Route implements Comparable<Route>{
 		return returned.toString();
 		
 	}
+	
+	
+	
+	
 
 	public int size() {
 		// TODO Auto-generated method stub

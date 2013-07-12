@@ -111,7 +111,22 @@ public class WifiSelectServlet extends HttpServlet {
 			TrackAdjust trackAdjust = new TrackAdjust();
 			
 			Map<Route,Integer> adjustedRoutes = trackAdjust.adjustTrack(predictedRoutes, datasize, bandwidth);
+			Route predictedRoute = trackpredictor.getPredictedTrack(adjustedRoutes);
+			List<Wifi> qualifiedwifi = WifiDistributionMap.getWifiMap(predictedRoute.toCoordinates());
 			
+			String mode = "map";
+			
+			if(mode == "map"){
+			
+				Coordinate[] coordinate = predictedRoute.toCoordinates();
+
+				req.setAttribute("route",predictedRoute);
+				req.getRequestDispatcher("/WifiSelect.jsp").forward(req, resp);
+
+				
+				
+			}
+			else{
 			
 			out.println("<html><body>Temporary Locations: <br>");
 			out.println(TempLocations.locations);
@@ -121,27 +136,28 @@ public class WifiSelectServlet extends HttpServlet {
 			
 			out.println("<br>The predicted routes are: <br>");
 			if(adjustedRoutes.size()>0){
-			out.println(new PrintRoutesOnWeb<Route,Integer>(adjustedRoutes));}
+				out.println(new PrintRoutesOnWeb<Route,Integer>(adjustedRoutes));}
 			else
 				out.println("No matched route is found.");
 			
 			
-			//Get the optimal one from adjustedRoutes
-			Route predictedRoute = trackpredictor.getPredictedTrack(adjustedRoutes);
-//			Route predictedRoute = trackpredictor.getPredictedTrack();
+
+			
+
 			out.println("<br>The optimal predicted route is: <br>");
 			if(predictedRoute.size()>0){
-			out.println(predictedRoute);}
+				out.println(predictedRoute);}
 			else
 				out.println("No matched route is found.");
 			
 			
 			out.println("<br>Qualified WiFi: <br>");
-			List<Wifi> qualifiedwifi = WifiDistributionMap.getWifiMap(predictedRoute.toCoordinates());
+			
 			if(predictedRoute.size()>0 && qualifiedwifi.size()>0)
-			out.println(qualifiedwifi);
+				out.println(qualifiedwifi);
 			else out.println("No qualified WiFi found.");
-			out.println("</body></html>");
+				out.println("</body></html>");
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
