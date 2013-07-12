@@ -22,13 +22,13 @@ public class ProcessTrace {
 	
 	//metric unit: kilometer. The bigger this value, the less the num of generated routes will be.
 	//Distance_threshold is used to differentiate different routes. 
-	private final double DISTANCE_threshold = 0.018;
+	private final double DISTANCE_threshold = 0.1;
 	
 	//metric unit: kilometer. The bigger this value, the less the num of refined routes will be.
-	private final double MERGE_threshold =  0.01;
+	private final double MERGE_threshold =  0.015;
 	
 	//The max Num of Coordinates in each route
-	private final int NUM_COORDINDATE = 5;
+	private final int NUM_COORDINDATE = 20;
 
 	
 	

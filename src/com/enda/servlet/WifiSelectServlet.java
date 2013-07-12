@@ -118,7 +118,7 @@ public class WifiSelectServlet extends HttpServlet {
 			
 			if(mode == "map"){
 			
-				Coordinate[] coordinate = predictedRoute.toCoordinates();
+//				Coordinate[] coordinate = predictedRoute.toCoordinates();
 
 				req.setAttribute("route",predictedRoute);
 				req.getRequestDispatcher("/WifiSelect.jsp").forward(req, resp);

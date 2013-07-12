@@ -49,7 +49,24 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <script>
 function initialize() {
-  var myLatLng = new google.maps.LatLng(22.305098376549246, 114.18095496479062);
+    <% Route predictedRoute= (Route)request.getAttribute("route");
+    Coordinate[] coors = predictedRoute.toCoordinates();%>
+	
+	  var flightPlanCoordinates = [
+	                         
+
+								<% for(int i=0;i<coors.length;i++){ 
+	                             	  out.println("new google.maps.LatLng("+coors[i].getX()+","+coors[i].getY()+"),");
+	                             	  
+	                               }%>
+	                             	  
+	                                        
+	                           ];
+	var centerX = <% out.println(coors[0].getX());%>;
+	var centerY = <% out.println(coors[0].getY());%>;
+	
+	
+  var myLatLng = new google.maps.LatLng(centerX, centerY);
   var mapOptions = {
     zoom: 17,
     center: myLatLng,
@@ -58,20 +75,7 @@ function initialize() {
 
   var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-  var flightPlanCoordinates = [
-      <% Route predictedRoute= (Route)request.getAttribute("route");
-      Coordinate[] coors = predictedRoute.toCoordinates();
 
-      for(int i=0;i<coors.length;i++){ 
-    	  out.println("new google.maps.LatLng("+coors[i].getX()+","+coors[i].getY()+"),");
-    	  
-      }%>
-    	  
-                         
-
-      
-
-  ];
   var flightPath = new google.maps.Polyline({
     path: flightPlanCoordinates,
     strokeColor: '#FF0000',

@@ -39,8 +39,14 @@ public class DemoCollectTraceAndGenerateRoutes {
 //
 		//write a random walk algorithm
 		//retrieve the coordinate at different time interval
-		
-		
+		Coordinate c1 = new Coordinate(22.306170,114.187281);
+		Coordinate[] c = new Coordinate[30];
+		c[0] = c1; 
+		for(int i=1;i<30;i++)
+		{
+			c[i] = GenerateRandomLocation.getLocation(c[i-1], 20);
+			System.out.println(c[i]);
+		}
 		
 //		currentLoc.setX(xcor); 
 //		currentLoc.setY(ycor);
@@ -48,6 +54,9 @@ public class DemoCollectTraceAndGenerateRoutes {
 //		Thread.sleep(1000);
 //		}
 //		}
+		
+		
+		
 		
 		
 		GenRoute genRoute = new GenRoute(user);
