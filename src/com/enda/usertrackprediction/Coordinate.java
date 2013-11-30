@@ -1,43 +1,45 @@
 package com.enda.usertrackprediction;
 
 public class Coordinate {
-	double x;
-	double y;
+	double latitude;
+	double longitude;
 	
 	public Coordinate(){
-		this.x = 0;
-		this.y = 0;
+		this.latitude = 0;
+		this.longitude = 0;
 	}
 	
 	public Coordinate(double x, double y){
-		this.x = x;
-		this.y = y;
+		this.latitude = x;
+		this.longitude = y;
 	}
 	
 	public Coordinate(Coordinate c){
-		this.x=c.getX();
-		this.y=c.getY();
+		this.latitude=c.getX();
+		this.longitude=c.getY();
 	}
 
+	//get latitude
 	public double getX() {
-		return x;
+		return this.latitude;
 	}
 
 	public void setX(double x) {
-		this.x = x;
+		this.latitude = x;
 	}
 
+	//get longitude
 	public double getY() {
-		return y;
+		return this.longitude;
 	}
 
 	public void setY(double y) {
-		this.y = y;
+		this.longitude = y;
 	}
 	
 	@Override
 	public String toString(){
-		return "<"+this.x +"," + this.y + ">"; 
+		return "<"+this.latitude +"," + this.longitude + ">"; 
 	}
 	
 	public boolean withinThreshold(Coordinate target, double threshold){

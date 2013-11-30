@@ -16,7 +16,7 @@ public class TrackAdjust {
 	}
 	
 	//Unit: datasize->KB, bandwidth->KB/s
-	public  Map<Route,Integer> adjustTrack(Map<Route, Integer> predictedRoutes, int datasize, int bandwidth){
+	public  Map<Route,Integer> adjustTrack(Map<Route, Integer> predictedRoutes, double datasize, double bandwidth){
 		double time = datasize/bandwidth;
 		
 		double distance = time * WALKING_SPEED /1000; //unit:km
@@ -34,9 +34,11 @@ public class TrackAdjust {
 			
 			while(it.hasNext()){
 				Coordinate currentCoor = it.next();
+
+				adjustedTrack.getRoute().add(currentCoor);
 				sum = sum + currentCoor.getDistanceFrom(previousCoor);
 				previousCoor = currentCoor;
-				adjustedTrack.getRoute().add(currentCoor);
+				
 //				System.out.println(adjustedTrack);
 				if (sum >= distance) {
 					adjustedTracks.put(adjustedTrack, entry.getValue());
@@ -50,6 +52,7 @@ public class TrackAdjust {
 			if(newRoute == false) {
 				//The expected distance is longer than the predicted track's distance. So the track is renounced.
 //				adjustedTracks.put(adjustedTrack, entry.getValue());
+			
 			adjustedTrack = new Route();
 			sum = 0;
 			}

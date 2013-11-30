@@ -45,7 +45,7 @@ public class WifiSelectServlet extends HttpServlet {
 		User user = new User(username);
 		double latitude = Double.parseDouble(x);
 		double longitude = Double.parseDouble(y);
-		int datasize = Integer.parseInt(size);
+		double datasize = Double.parseDouble(size);
 		
 		Coordinate currentLoc = new Coordinate(latitude,longitude);
 		
@@ -74,7 +74,7 @@ public class WifiSelectServlet extends HttpServlet {
 			Timestamp currentDatetime = entry.getKey();
 			ts.setPreviousTime(currentDatetime);
 			ts.setCurrentTime(temptime);
-			if(ts.getTimeSlotInMillisecond()< 20000){
+			if(ts.getTimeSlotInMillisecond()< 20000){ // add distance filter: if two coordinates have a too long distance, filter out)
 				temp.add(entry.getValue());
 			}
 			else{
@@ -106,7 +106,7 @@ public class WifiSelectServlet extends HttpServlet {
 			Map<Route,Integer> predictedRoutes =  trackpredictor.getPredictedTracks();
 			
 			//Pre-define the bandwidth for each cloudlet.
-			int bandwidth = 200; //unit: KB/s
+			double bandwidth = 16*128; //unit: KB/s
 					
 			TrackAdjust trackAdjust = new TrackAdjust();
 			
@@ -114,7 +114,7 @@ public class WifiSelectServlet extends HttpServlet {
 			Route predictedRoute = trackpredictor.getPredictedTrack(adjustedRoutes);
 			List<Wifi> qualifiedwifi = WifiDistributionMap.getWifiMap(predictedRoute.toCoordinates());
 			
-			String mode = "map";
+			String mode = "wifi";
 			
 			if(mode == "map"){
 			
@@ -126,7 +126,7 @@ public class WifiSelectServlet extends HttpServlet {
 				
 				
 			}
-			else{
+			if(mode == "route+wifi"){
 			
 			out.println("<html><body>Temporary Locations: <br>");
 			out.println(TempLocations.locations);
@@ -158,6 +158,14 @@ public class WifiSelectServlet extends HttpServlet {
 			else out.println("No qualified WiFi found.");
 				out.println("</body></html>");
 			}
+			
+			if(mode == "wifi"){
+				if(predictedRoute.size()>0 && qualifiedwifi.size()>0)
+					out.println(qualifiedwifi);
+				else out.println("No qualified WiFi found.");
+					out.println("</body></html>");
+			}
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -96,6 +96,28 @@ public class Route implements Comparable<Route>{
 	public int getNumOfCoordinates(){
 		return this.route.size();
 	}
+	
+	
+	public double computeDistanceFrom(Route r){
+		if(this.getOverallDistance()>r.getOverallDistance())
+			return 0;
+		
+		double distance=0;
+		int index;
+		if(this.getNumOfCoordinates()<r.getNumOfCoordinates()){
+			index = this.getNumOfCoordinates();
+		}
+		else{
+			index = r.getNumOfCoordinates();
+		}
+		
+		for(int i=0;i<index;i++){
+			distance+= this.route.get(i).getDistanceFrom(r.getRoute().get(i));
+		}
+		
+		return distance;
+		
+	}
 }
 	
 

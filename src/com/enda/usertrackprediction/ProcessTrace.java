@@ -22,13 +22,16 @@ public class ProcessTrace {
 	
 	//metric unit: kilometer. The bigger this value, the less the num of generated routes will be.
 	//Distance_threshold is used to differentiate different routes. 
-	private final double DISTANCE_threshold = 0.1;
+	private final double DISTANCE_THRESHOLD = 0.15    ;
+	
+	
+	//The min Num of Coordinates in each route
+	private final int NUM_COORDINDATE = 20;
 	
 	//metric unit: kilometer. The bigger this value, the less the num of refined routes will be.
-	private final double MERGE_threshold =  0.015;
+	private final double MERGE_THRESHOLD =  0.01;
 	
-	//The max Num of Coordinates in each route
-	private final int NUM_COORDINDATE = 20;
+
 
 	
 	
@@ -91,13 +94,13 @@ public class ProcessTrace {
 				Route refinedRoute = e.getKey();
 				count = e.getValue().intValue();
 				//If refinedRoute contains processedRoute, true, then count + 1 for the refinedRoute
-				if(mergeRedundantRoutes.isSubSetOf(processedRoute, refinedRoute,MERGE_threshold)){
+				if(mergeRedundantRoutes.isSubSetOf(processedRoute, refinedRoute,MERGE_THRESHOLD)){
 					refinedRoutes.put(refinedRoute, new Integer(count+1));
 					whetherFind = true;
 					break;}
 					
 			//if processRoute contains refinedRoute, true, then remove refinedRoute, and add processedRoute with count+1
-			if(mergeRedundantRoutes.isSubSetOf(refinedRoute,processedRoute, MERGE_threshold)){
+			if(mergeRedundantRoutes.isSubSetOf(refinedRoute,processedRoute, MERGE_THRESHOLD)){
 				refinedRoutes.remove(refinedRoute);
 				refinedRoutes.put(processedRoute, new Integer(count+1));
 				whetherFind = true;
@@ -147,7 +150,7 @@ public class ProcessTrace {
 			Timestamp currentDatetime = entry.getKey();
 			
 			//If currentLoc is too far away from previousLoc, the route is considered reaching the end.
-			if (!currentLoc.withinThreshold(previousLoc, DISTANCE_threshold)){
+			if (!currentLoc.withinThreshold(previousLoc, DISTANCE_THRESHOLD)){
 
 				generatedRoutes.put(timeSlot,route);
 				previousDatetime = currentDatetime;
@@ -195,6 +198,64 @@ public class ProcessTrace {
 		QueryCoordinate queryCoordinate = new QueryCoordinate();
 		storedLoc = queryCoordinate.queryLoc(this.user);
 		System.out.println("The number of recorded coordinates is " + storedLoc.size()+".");
+		
+		System.out.println("DISTANCE_THRESHOLD = "+DISTANCE_THRESHOLD);
+
+		System.out.println("NUMBER_COORDINATES = "+NUM_COORDINDATE );
+		System.out.println("MERGE_THRESHOLD = "+ MERGE_THRESHOLD);
+		boolean countCoor = false;
+		
+		if(countCoor){
+		
+		Coordinate currentCoordinate = null;
+		
+		Coordinate c1 = new Coordinate(22.305098376549246,114.18095496479062);
+		Coordinate c2 = new Coordinate(22.303772,114.179734);
+		Coordinate c3 = new Coordinate(22.302833,114.178626);
+		Coordinate c4 = new Coordinate(22.303582,114.182279);
+		
+		Coordinate[] c = {c1,c2,c3,c4};
+		
+		int count1=0,count2=0,count3=0,count4=0;
+		
+	
+		
+		int flag,i;
+		double distance;
+		
+		for(Map.Entry<Timestamp, Coordinate> entry:storedLoc.entrySet()){
+			currentCoordinate = entry.getValue();
+			
+			flag=0;
+			distance = currentCoordinate.getDistanceFrom(c[0]);
+			
+			for(i=1;i<4;i++){
+				if(distance > currentCoordinate.getDistanceFrom(c[i])){
+					flag = i;
+					distance = currentCoordinate.getDistanceFrom(c[i]);
+				}
+			}
+			
+			switch(flag){
+			case 0: count1++; break;
+			case 1: count2++; break;
+			case 2: count3++; break;
+			case 3: count4++; break;
+			default:break;
+			}
+			
+
+		}
+	
+		
+		
+		System.out.println("c1: "+count1);
+		System.out.println("c2: "+count2);
+		System.out.println("c3: "+count3);
+		System.out.println("c4: "+count4);
+		int all = count1+count2+count3+count4;
+		System.out.println("all: "+all);}
+		
 		return storedLoc;
 		
 	}

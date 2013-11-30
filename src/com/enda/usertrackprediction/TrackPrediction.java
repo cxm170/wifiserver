@@ -17,7 +17,7 @@ public class TrackPrediction {
 
 	private GenRoute genRoute; 
 	
-	private final double MATCH_threshold = 0.01;
+	private final double MATCH_threshold = 0.003;
 
 	
 	
@@ -162,8 +162,9 @@ public class TrackPrediction {
 		}
 
 		if(predictedTracks.size()>0){
-		System.out.println("Qualified tracks are: ");
-		System.out.println(new PrintRefinedRoutes<Route, Integer>(predictedTracks));}
+//		System.out.println("Qualified tracks are: ");
+//		System.out.println(new PrintRefinedRoutes<Route, Integer>(predictedTracks));
+			}
 		else{
 			System.out.println("No matched routes are found.");
 		}
