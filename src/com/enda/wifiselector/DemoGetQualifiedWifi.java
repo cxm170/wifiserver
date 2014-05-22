@@ -27,8 +27,8 @@ public class DemoGetQualifiedWifi {
 		
 		
 		User user = new User("Inman");
-		TrackPrediction trackpredictor = new TrackPrediction(user,coordinates);
-		Map<Route,Integer> predictedRoutes =  trackpredictor.getPredictedTracks();
+		TrackPrediction trackpredictor = new TrackPrediction(user);
+		Map<Route,Integer> predictedRoutes =  trackpredictor.getPredictedTracks(coordinates);
 		
 		//Pre-define the bandwidth for each cloudlet.
 		double bandwidth = 1*128; //unit: KB/s

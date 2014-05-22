@@ -8,7 +8,7 @@ import com.enda.util.PrintRefinedRoutes;
 
 public class DemoCollectTraceAndGenerateRoutes {
 	public static void main(String [] args) throws SQLException, InterruptedException{
-		User user = new User("Inman");
+		User user = new User("acli");
 		
 		CollectTrace collecttrace = new CollectTrace(user);
 		Coordinate currentLoc = new Coordinate();
@@ -30,7 +30,7 @@ public class DemoCollectTraceAndGenerateRoutes {
 		
 		Random random = new Random();
 		int k;
-		boolean check = true;
+		boolean check = false;
 		if (check){
 		for(int j=1;j<2000;j++){
 			double r = Math.random();

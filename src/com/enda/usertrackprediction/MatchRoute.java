@@ -6,6 +6,10 @@ public class MatchRoute {
 	
 	private Coordinate[] locs;
 	
+	public MatchRoute(){
+		
+	}
+	
 	public MatchRoute(Coordinate[] locs){
 		this.locs=locs;
 	}

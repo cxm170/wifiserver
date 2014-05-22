@@ -3,7 +3,10 @@ package com.enda.mysql;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.List;
 
+import com.enda.usertrackprediction.Coordinate;
 import com.enda.wifiselector.Wifi;
 
 
@@ -22,13 +25,34 @@ public class RegisterWifi {
 		double x = newwifi.getxPos();
 		double y = newwifi.getyPos();
 		int radius = newwifi.getRadius();
+		String MAC = newwifi.getMAC();
+		
+		List<Coordinate> allcoordinates = newwifi.getCoorsContained();
+		
+		StringBuilder sb = new StringBuilder();
+		
+		Iterator it = allcoordinates.iterator();
+		
+		Coordinate tempcoor = new Coordinate();
+		
+		while(it.hasNext()){
+			tempcoor = (Coordinate) it.next();
+			
+			sb.append(String.valueOf(tempcoor.getX()));
+			sb.append(" ");
+			sb.append(String.valueOf(tempcoor.getY()));
+			sb.append(" ");
+			
+		}
+		
+		String allcoor = sb.toString();
 		
 		Statement stmt = null;
 		
 	    try {
-	    	String sql = "insert into wifilocation (name,x,y,radius) " +
-		            "values('" + APname + "'," + x + ", " +
-		            y+ "," + radius+")";
+	    	String sql = "insert into wifilocation (MAC,name,x,y,radius,coordinates) " +
+		            "values('"+MAC+"','" + APname + "'," + x + ", " +
+		            y+ "," + radius+",'"+allcoor+"')";
 	    	System.out.println(sql);
 	        stmt = con.createStatement();
 	        stmt.executeUpdate(

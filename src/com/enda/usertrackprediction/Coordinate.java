@@ -45,7 +45,7 @@ public class Coordinate {
 	public boolean withinThreshold(Coordinate target, double threshold){
 		double distance = HaversineAlgorithm.HaversineInKM(this.getX(),this.getY(),target.getX(),target.getY());
 //		System.out.println(distance);
-		if (distance < threshold) 
+		if (distance <= threshold) 
 			return true;
 		else return false;
 	}

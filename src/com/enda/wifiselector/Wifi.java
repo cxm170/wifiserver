@@ -1,5 +1,7 @@
 package com.enda.wifiselector;
 
+import java.util.List;
+
 import com.enda.usertrackprediction.Coordinate;
 import com.enda.usertrackprediction.HaversineAlgorithm;
 
@@ -9,13 +11,20 @@ public class Wifi {
 	private double xPos;
 	private double yPos;
 	private int radius;
+	private List<Coordinate> coorsContained;
+	private String MAC;
 	
 	
-	public Wifi(String APname, double x, double y){
+	public Wifi(){
+		
+	}
+	
+	public Wifi(String APname, double x, double y, String MAC){
 		this.APname = APname;
 		this.xPos = x;
 		this.yPos = y;
 		radius = 50; //unit: meter
+		this.MAC=MAC;
 	}
 	
 	public String getAPname() {
@@ -26,12 +35,25 @@ public class Wifi {
 		APname = aPname;
 	}
 
-	public Wifi(String APname,double x, double y, int r)
+	public Wifi(String APname,double x, double y, int r, String MAC)
 	{
 		this.APname = APname;
 		this.xPos =x;
 		this.yPos = y;
 		this.radius = r;
+		this.MAC=MAC;
+	}
+	
+	public Wifi(String APname, double x, double y, String MAC, List<Coordinate> coorsContained){
+		this.APname=APname;
+		this.xPos=x;
+		this.yPos=y;
+		this.coorsContained=coorsContained;
+		this.MAC=MAC;
+	}
+
+	public String getMAC() {
+		return MAC;
 	}
 
 	public double getxPos() {
@@ -59,10 +81,20 @@ public class Wifi {
 	}
 	
 	public String toString(){
-		return this.APname+"@<"+this.xPos+","+this.yPos+"> Range: "+radius+" meters";
+		return this.APname+"@<"+this.xPos+","+this.yPos+"> Range: "+radius+" meters Coverage:" + this.coorsContained;
 	}
 	
 	public double getDistanceFrom(Coordinate target){
 		return HaversineAlgorithm.HaversineInKM(this.getxPos(),this.getyPos(),target.getX(),target.getY());
 	}
+
+	public List<Coordinate> getCoorsContained() {
+		return coorsContained;
+	}
+
+	public void setCoorsContained(List<Coordinate> coorsContained) {
+		this.coorsContained = coorsContained;
+	}
+	
+	
 }

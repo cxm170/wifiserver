@@ -11,7 +11,9 @@ public class Route implements Comparable<Route>{
 		route = new ArrayList<Coordinate>();
 	}
 	
-
+	public Route(List<Coordinate> r){
+		this.route=r;
+	}
 	
 	public List<Coordinate> getRoute(){
 		return route;
@@ -95,6 +97,20 @@ public class Route implements Comparable<Route>{
 	
 	public int getNumOfCoordinates(){
 		return this.route.size();
+	}
+	
+	
+	public boolean containCoordinate(Coordinate c){
+		Iterator it = this.route.iterator();
+		Coordinate temp = new Coordinate();
+		while(it.hasNext()){
+			temp = (Coordinate) it.next();
+			if (temp.getX()==c.getX()&&temp.getY()==c.getY()) return true;
+			
+		}
+		
+		return false;
+		
 	}
 	
 	

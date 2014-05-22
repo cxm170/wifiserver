@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.ServletException;
@@ -19,12 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.enda.usertrackprediction.Coordinate;
+import com.enda.usertrackprediction.ProcessTraceInList;
 import com.enda.usertrackprediction.Route;
 import com.enda.usertrackprediction.TimestampSlot;
 import com.enda.usertrackprediction.TrackAdjust;
 import com.enda.usertrackprediction.TrackPrediction;
 import com.enda.usertrackprediction.User;
-import com.enda.util.PrintRefinedRoutes;
 import com.enda.util.PrintRoutesOnWeb;
 import com.enda.wifiselector.Wifi;
 import com.enda.wifiselector.WifiDistributionMap;
@@ -102,8 +103,8 @@ public class WifiSelectServlet extends HttpServlet {
 	    // Here, only getWiFiMap, instead of optimal WiFi AP.
 	    
 		try {
-			TrackPrediction trackpredictor = new TrackPrediction(user,coordinates);
-			Map<Route,Integer> predictedRoutes =  trackpredictor.getPredictedTracks();
+			TrackPrediction trackpredictor = new TrackPrediction(user);
+			Map<Route,Integer> predictedRoutes =  trackpredictor.getPredictedTracks(coordinates);
 			
 			//Pre-define the bandwidth for each cloudlet.
 			double bandwidth = 16*128; //unit: KB/s
@@ -114,13 +115,28 @@ public class WifiSelectServlet extends HttpServlet {
 			Route predictedRoute = trackpredictor.getPredictedTrack(adjustedRoutes);
 			List<Wifi> qualifiedwifi = WifiDistributionMap.getWifiMap(predictedRoute.toCoordinates());
 			
-			String mode = "wifi";
+			String mode = "map";
 			
 			if(mode == "map"){
 			
 //				Coordinate[] coordinate = predictedRoute.toCoordinates();
-
-				req.setAttribute("route",predictedRoute);
+				ProcessTraceInList pr = new ProcessTraceInList(user);
+				List<Route> generatedRoutes = pr.generateListOfRoutes();
+				Map<Route,Integer> refinedRoutes = pr.refineListOfRoutes(generatedRoutes);
+				
+				int count = 0;
+				Route index = new Route();
+				for(Map.Entry<Route, Integer> entry:refinedRoutes.entrySet()){
+					Route rt = entry.getKey();
+					if(rt.size()>count) {count = rt.size();
+					index=rt;
+					}
+					
+					
+				}
+				
+				
+				req.setAttribute("route",index);
 				req.getRequestDispatcher("/WifiSelect.jsp").forward(req, resp);
 
 				

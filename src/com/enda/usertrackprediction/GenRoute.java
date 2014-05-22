@@ -1,13 +1,13 @@
 package com.enda.usertrackprediction;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class GenRoute {
 	
 
-	private ProcessTrace processTrace = new ProcessTrace();
+	private ProcessTraceInList processTrace = new ProcessTraceInList();
 	
 	public GenRoute(User user) throws SQLException{
 		 this.processTrace.setUser(user);
@@ -24,8 +24,14 @@ public class GenRoute {
 	//Only invoked, generatedRoutes will be refined, which causes large amounts of computation.
 	public Map<Route,Integer> getRefinedRoutes() throws SQLException{
 		 
-		 Map<TimestampSlot, Route> generatedRoutes = processTrace.generateListOfRoutes();
+		 List<Route> generatedRoutes = processTrace.generateListOfRoutes();
 		 Map<Route,Integer> refinedRoutes = processTrace.refineListOfRoutes(generatedRoutes);
 		return refinedRoutes;
 	}
+	
+	public List<Route> getGeneratedRoutes() throws SQLException{
+		List<Route> generatedRoutes = processTrace.generateListOfRoutes();
+		return generatedRoutes;
+	}
+	
 }

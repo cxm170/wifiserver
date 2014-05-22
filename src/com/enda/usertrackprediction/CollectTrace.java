@@ -14,7 +14,7 @@ public class CollectTrace {
 		insertCoordinate = new InsertCoordinate();
 	}
 	
-	
+
 
 	
 

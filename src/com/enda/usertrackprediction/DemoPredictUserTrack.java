@@ -6,10 +6,10 @@ import java.util.Random;
 
 public class DemoPredictUserTrack {
 	public static void main(String [] args) throws SQLException{
-		User user = new User("Inman");
+		User user = new User("hlaw");
 
 		
-		Coordinate c1 = new Coordinate(22.30508281467609,114.18086309953941);
+		Coordinate c1 = new Coordinate(22.329,114.1865);
 //		Coordinate c2 = new Coordinate(22.305154480173552,114.18084794740665);
 //		Coordinate c3 = new Coordinate(22.305065973995234,114.1808579659842);
 //		Coordinate c4 = new Coordinate(22.305094830809715,114.18084447902604);
@@ -34,40 +34,40 @@ public class DemoPredictUserTrack {
 		
 		
 		
-		Coordinate[] locss = {locs[1],locs[0]};
+		Coordinate[] locss = {c1};
 //		
 
 		
-		TrackPrediction trackpredictor = new TrackPrediction(user,locss);
+		TrackPrediction trackpredictor = new TrackPrediction(user);
 
-		Map<Route,Integer> predictedRoutes = trackpredictor.getPredictedTracks();
+		Map<Route,Integer> predictedRoutes = trackpredictor.getPredictedTracks(locss);
 		Route predictedRoute =  trackpredictor.getPredictedTrack(predictedRoutes);
 //		Route predictedRoute1 =  trackpredictor.getPredictedTrack();
 		
 		
-		double minDistance = actualRoute.computeDistanceFrom(predictedRoute);
-		
-		System.out.println(actualRoute);
-		System.out.println("Overall Distance Deviation= " + minDistance + " km.");
-		if(actualRoute.size()<predictedRoute.size()){
-		System.out.println("Average Distance Deviation= " + minDistance/actualRoute.size() + " km.");
-		}
-		else{
-			System.out.println("Average Distance Deviation= " + minDistance/predictedRoute.size() + " km.");	
-		}
-		
-		
-		double tempDistance;
-		
-		for(Map.Entry<Route, Integer> entry:predictedRoutes.entrySet()){
-			Route tempRoute = entry.getKey();
-			tempDistance = actualRoute.computeDistanceFrom(tempRoute);
-			if(tempDistance<minDistance&&tempRoute.getOverallDistance()>=actualRoute.getOverallDistance()) {minDistance = tempDistance;
-			System.out.println(tempRoute);
-			}
-		}
-		
-		System.out.println("Min Distance = " + minDistance);
+//		double minDistance = actualRoute.computeDistanceFrom(predictedRoute);
+//		
+//		System.out.println(actualRoute);
+//		System.out.println("Overall Distance Deviation= " + minDistance + " km.");
+//		if(actualRoute.size()<predictedRoute.size()){
+//		System.out.println("Average Distance Deviation= " + minDistance/actualRoute.size() + " km.");
+//		}
+//		else{
+//			System.out.println("Average Distance Deviation= " + minDistance/predictedRoute.size() + " km.");	
+//		}
+//		
+//		
+//		double tempDistance;
+//		
+//		for(Map.Entry<Route, Integer> entry:predictedRoutes.entrySet()){
+//			Route tempRoute = entry.getKey();
+//			tempDistance = actualRoute.computeDistanceFrom(tempRoute);
+//			if(tempDistance<minDistance&&tempRoute.getOverallDistance()>=actualRoute.getOverallDistance()) {minDistance = tempDistance;
+//			System.out.println(tempRoute);
+//			}
+//		}
+//		
+//		System.out.println("Min Distance = " + minDistance);
 	}
 
 }
