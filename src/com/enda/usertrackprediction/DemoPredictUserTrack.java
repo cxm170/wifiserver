@@ -1,11 +1,12 @@
 package com.enda.usertrackprediction;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Map;
 import java.util.Random;
 
 public class DemoPredictUserTrack {
-	public static void main(String [] args) throws SQLException{
+	public static void main(String [] args) throws SQLException, ParseException{
 		User user = new User("hlaw");
 
 		

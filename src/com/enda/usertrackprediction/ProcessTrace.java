@@ -8,6 +8,7 @@ package com.enda.usertrackprediction;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -22,14 +23,14 @@ public class ProcessTrace {
 	
 	//metric unit: kilometer. The bigger this value, the less the num of generated routes will be.
 	//Distance_threshold is used to differentiate different routes. 
-	private final double DISTANCE_THRESHOLD = 0.05    ;
+	private double DISTANCE_THRESHOLD = 0.05    ;
 	
 	
 	//The min Num of Coordinates in each route
-	private final int NUM_COORDINDATE = 5;
+	private int NUM_COORDINDATE = 5;
 	
 	//metric unit: kilometer. The bigger this value, the less the num of refined routes will be.
-	private final double MERGE_THRESHOLD =  0.03;
+	private double MERGE_THRESHOLD =  0.03;
 	
 
 
@@ -72,10 +73,10 @@ public class ProcessTrace {
 		}
 		
 		if (!filteredRoutes.isEmpty()){
-			//System.out.println("The filtered routes for "+user +" are:");
-			//System.out.println(new PrintGeneratedRoutes<TimestampSlot,Route>(filteredRoutes));
-//			System.out.print("The size of filteredRoutes is: ");
-//			System.out.println(filteredRoutes.size()+".");
+//			System.out.println("The filtered routes for "+user +" are:");
+//			System.out.println(new PrintGeneratedRoutes<TimestampSlot,Route>(filteredRoutes));
+			System.out.print("The size of filteredRoutes is: ");
+			System.out.println(filteredRoutes.size()+".");
 
 			}
 		
@@ -114,10 +115,10 @@ public class ProcessTrace {
 		
 
 		if( !refinedRoutes.isEmpty()){
-			//System.out.println("The refined routes for "+user +" are:");
-			//System.out.println(new PrintRefinedRoutes<Route,Integer>(refinedRoute));
-//			System.out.print("The size of refinedRoute is: ");
-//			System.out.println(refinedRoutes.size()+".");
+//			System.out.println("The refined routes for "+user +" are:");
+//			System.out.println(new PrintRefinedRoutes<Route,Integer>(refinedRoute));
+			System.out.print("The size of refinedRoute is: ");
+			System.out.println(refinedRoutes.size()+".");
 		}
 		
 		return refinedRoutes;
@@ -127,7 +128,7 @@ public class ProcessTrace {
 	
 	
 // generate list of routes for target users. These routes are not compressed yet at this stage.	
-	public Map<TimestampSlot,Route> generateListOfRoutes() throws SQLException {
+	public Map<TimestampSlot,Route> generateListOfRoutes() throws SQLException, ParseException {
 		Map<TimestampSlot,Route> generatedRoutes = new TreeMap<TimestampSlot,Route>();
 		Map<Timestamp,Coordinate> allLoc = new TreeMap<Timestamp,Coordinate>();
 		
@@ -180,8 +181,8 @@ public class ProcessTrace {
 		if (!generatedRoutes.isEmpty()){
 //			System.out.println("The generated routes for "+user +" are:");
 //			System.out.println(new PrintGeneratedRoutes<TimestampSlot,Route>(generatedRoutes));
-//			System.out.print("The size of generatedRoute is: ");
-//			System.out.println(generatedRoutes.size()+".");
+			System.out.print("The size of generatedRoute is: ");
+			System.out.println(generatedRoutes.size()+".");
 			}
 		
 		return generatedRoutes;}
@@ -194,11 +195,11 @@ public class ProcessTrace {
 	}
 	
 	//retrieve all the coordinates and their corresponding timstamp for the target user
-	public Map<Timestamp,Coordinate> retrieveCoordinate() throws SQLException{
+	public Map<Timestamp,Coordinate> retrieveCoordinate() throws SQLException, ParseException{
 		Map<Timestamp,Coordinate> storedLoc = new TreeMap<Timestamp,Coordinate>();
 		QueryCoordinate queryCoordinate = new QueryCoordinate();
-		storedLoc = queryCoordinate.queryLoc(this.user);
-//		System.out.println("The number of recorded coordinates is " + storedLoc.size()+".");
+		storedLoc = queryCoordinate.queryLoc();
+		System.out.println("The number of recorded coordinates is " + storedLoc.size()+".");
 //		
 //		System.out.println("DISTANCE_THRESHOLD = "+DISTANCE_THRESHOLD);
 //
@@ -263,4 +264,28 @@ public class ProcessTrace {
 		
 	}
 
+	
+	public double getDISTANCE_THRESHOLD() {
+		return DISTANCE_THRESHOLD;
+	}
+
+	public void setDISTANCE_THRESHOLD(double dISTANCE_THRESHOLD) {
+		DISTANCE_THRESHOLD = dISTANCE_THRESHOLD;
+	}
+
+	public int getNUM_COORDINDATE() {
+		return NUM_COORDINDATE;
+	}
+
+	public void setNUM_COORDINDATE(int nUM_COORDINDATE) {
+		NUM_COORDINDATE = nUM_COORDINDATE;
+	}
+
+	public double getMERGE_THRESHOLD() {
+		return MERGE_THRESHOLD;
+	}
+
+	public void setMERGE_THRESHOLD(double mERGE_THRESHOLD) {
+		MERGE_THRESHOLD = mERGE_THRESHOLD;
+	}
 }

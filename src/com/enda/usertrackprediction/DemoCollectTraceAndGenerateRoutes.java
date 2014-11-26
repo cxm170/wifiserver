@@ -1,13 +1,14 @@
 package com.enda.usertrackprediction;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Map;
 import java.util.Random;
 
 import com.enda.util.PrintRefinedRoutes;
 
 public class DemoCollectTraceAndGenerateRoutes {
-	public static void main(String [] args) throws SQLException, InterruptedException{
+	public static void main(String [] args) throws SQLException, InterruptedException, ParseException{
 		User user = new User("acli");
 		
 		CollectTrace collecttrace = new CollectTrace(user);

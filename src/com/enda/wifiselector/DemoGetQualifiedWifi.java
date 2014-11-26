@@ -1,6 +1,7 @@
 package com.enda.wifiselector;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Map;
 
 import com.enda.usertrackprediction.Coordinate;
@@ -11,7 +12,7 @@ import com.enda.usertrackprediction.TrackPrediction;
 import com.enda.usertrackprediction.User;
 
 public class DemoGetQualifiedWifi {
-	public static void main(String [] args) throws SQLException{
+	public static void main(String [] args) throws SQLException, ParseException{
 //		Coordinate coor = new Coordinate(22.3044967,114.1807311); 
 		
 		

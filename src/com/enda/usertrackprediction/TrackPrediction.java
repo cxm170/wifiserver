@@ -1,6 +1,7 @@
 package com.enda.usertrackprediction;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedSet;
@@ -20,7 +21,14 @@ public class TrackPrediction {
 	private Map<Route,Integer> routesCompareTo = new TreeMap<>();
 	private double MATCH_threshold = 0.000;
 
-	public TrackPrediction(User user) throws SQLException{
+	public TrackPrediction() throws SQLException, ParseException{
+		this.genRoute = new GenRoute(new User("any"));
+		this.routesCompareTo = genRoute.getRefinedRoutes();
+	}
+	
+	
+	
+	public TrackPrediction(User user) throws SQLException, ParseException{
 		this.genRoute = new GenRoute(user);
 		this.routesCompareTo = genRoute.getRefinedRoutes();
 	}
@@ -91,7 +99,7 @@ public class TrackPrediction {
 //	}
 	
 	
-	public Route getPredictedTrack(Coordinate[] currentLoc) throws SQLException{
+	public Route getPredictedTrack(Coordinate[] currentLoc) throws SQLException, ParseException{
 		Map<Route,Integer> temp = getPredictedTracks(currentLoc);
 		
 		return getPredictedTrack(temp);
@@ -132,7 +140,7 @@ public class TrackPrediction {
 	
 	
 	//Get a list of predicted routes.
-	public Map<Route,Integer> getPredictedTracks(Coordinate[] currentLoc) throws SQLException{
+	public Map<Route,Integer> getPredictedTracks(Coordinate[] currentLoc) throws SQLException, ParseException{
 		Map<Route, Integer> routesCompareTo = this.genRoute.getRefinedRoutes();
 
 		Map<Route,Integer> predictedTracks = new TreeMap<>();
