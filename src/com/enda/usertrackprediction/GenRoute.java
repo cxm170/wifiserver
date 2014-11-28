@@ -10,8 +10,14 @@ public class GenRoute {
 
 	private ProcessTrace processTrace = new ProcessTrace();
 	
-	public GenRoute(User user) throws SQLException{
+	private Map<TimestampSlot, Route> generatedRoutes;
+	
+	public GenRoute(User user) throws SQLException, ParseException{
 		 this.processTrace.setUser(user);
+		 processTrace.setDISTANCE_THRESHOLD(0.1);
+		 processTrace.setNUM_COORDINDATE(3);
+		 processTrace.setMERGE_THRESHOLD(0.1);
+		 this.generatedRoutes = processTrace.generateListOfRoutes();
 		
 		
 	}
@@ -25,14 +31,14 @@ public class GenRoute {
 	//Only invoked, generatedRoutes will be refined, which causes large amounts of computation.
 	public Map<Route,Integer> getRefinedRoutes() throws SQLException, ParseException{
 		 
-		 Map<TimestampSlot, Route> generatedRoutes = processTrace.generateListOfRoutes();
+		 
 		 Map<Route,Integer> refinedRoutes = processTrace.refineListOfRoutes(generatedRoutes);
 		return refinedRoutes;
 	}
 	
 	public Map<TimestampSlot, Route> getGeneratedRoutes() throws SQLException, ParseException{
-		Map<TimestampSlot, Route> generatedRoutes = processTrace.generateListOfRoutes();
-		return generatedRoutes;
+		
+		return this.generatedRoutes;
 	}
 	
 }

@@ -78,7 +78,7 @@ public class QueryWifi {
 	}
 	
 	
-public List<WifiNew> getWifiForLocation(Coordinate coor) throws SQLException{
+		public List<WifiNew> getWifiForLocation(Coordinate coor) throws SQLException{
 		
 		Statement stmt = null;
 		List<WifiNew> results = new ArrayList<>();

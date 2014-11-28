@@ -99,12 +99,14 @@ public class TrackPrediction {
 //	}
 	
 	
+	//Get the one predicted track based on input multiple locations. The API to use for other apps.
 	public Route getPredictedTrack(Coordinate[] currentLoc) throws SQLException, ParseException{
 		Map<Route,Integer> temp = getPredictedTracks(currentLoc);
 		
 		return getPredictedTrack(temp);
 	}
 	
+	//Choose the one with largest count as the predicted track
 	public Route getPredictedTrack(Map<Route,Integer> predictedTracks){
 		int frequencyOfPredictedTrack = 0;
 		Route predictedTrack = new Route();
@@ -139,9 +141,13 @@ public class TrackPrediction {
 	}
 	
 	
-	//Get a list of predicted routes.
+	//Get a list of predicted routes for multiple input locations
+	//currentLoc[0] is current location
+	//currentLoc[1] is the latest location from current location
+	//currentLoc[2] is the second latest location from current location
+	//and so on.
 	public Map<Route,Integer> getPredictedTracks(Coordinate[] currentLoc) throws SQLException, ParseException{
-		Map<Route, Integer> routesCompareTo = this.genRoute.getRefinedRoutes();
+		
 
 		Map<Route,Integer> predictedTracks = new TreeMap<>();
 		//prediction algorithm. Match currentLoc with all coor in routesCompareTo.
@@ -226,7 +232,7 @@ public class TrackPrediction {
 	
 	
 	
-	//Get a list of predicted routes.
+	//Get a list of predicted routes for single input location
 	public Map<Route,Integer> getPredictedTracks(Coordinate currenSingletLoc) throws SQLException{
 		Map<Route, Integer> routesCompareTo = this.routesCompareTo;
 

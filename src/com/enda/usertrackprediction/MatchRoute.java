@@ -4,6 +4,10 @@ import java.util.Iterator;
 
 public class MatchRoute {
 	
+	//currentLoc[0] is current location
+	//currentLoc[1] is the latest location from current location
+	//currentLoc[2] is the second latest location from current location
+	//and so on.
 	private Coordinate[] locs;
 	
 	public MatchRoute(){
@@ -24,13 +28,24 @@ public class MatchRoute {
 		}
 	
 	public boolean allWithinRoute(Route r, double threshold){
-		for(int i=0;i<this.locs.length;i++){
-			if (!this.isWithinRoute(this.locs[i], r, threshold)) {
-//				System.out.println("This route does not match" + r);
-				return false;
+			int i = locs.length - 1;
+			Iterator<Coordinate> it = r.getRoute().iterator();
+			while(it.hasNext()){
+				Coordinate coor = it.next();
+				if(locs[i].withinThreshold(coor, threshold)) i--;
+				if(i==-1) break;
 			}
-		}
-		return true;
+			
+			
+//			if (!this.isWithinRoute(this.locs[i], r, threshold)) {
+////				System.out.println("This route does not match" + r);
+//				return false;
+//			}
+		
+		if(i==-1)
+			return true;
+		else
+			return false;
 	}
 
 	
